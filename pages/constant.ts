@@ -8,6 +8,14 @@ interface ColorObject {
     WHITE: string;
 }
 
+interface ToolBoxObject {
+    PENCILE: string,
+    ERASER: string,
+    UNDO: string,
+    REDO: string,
+    DOWNLOAD: string
+}
+
 export const COLOURS: ColorObject = {
     BLACK: "black",
     GREEN: "green",
@@ -16,4 +24,12 @@ export const COLOURS: ColorObject = {
     ORANGE: "orange",
     YELLOW: "yellow",
     WHITE: "white",
+}
+
+export const TOOL: ToolBoxObject = {
+    PENCILE: "PENCILE",
+    ERASER: "ERASER",
+    UNDO: "UNDO",
+    REDO: "REDO",
+    DOWNLOAD: "DOWNLOAD",
 }

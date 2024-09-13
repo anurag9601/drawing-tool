@@ -23,6 +23,10 @@
     border-radius: 5px;
 }
 
-.menuOption:hover,.menuOption:active{
+.menuOption:hover{
+    background: #e7c6ff;
+}
+
+.active{
     background-color: #e7c6ff;
 }
