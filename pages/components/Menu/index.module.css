@@ -1,0 +1,28 @@
+.menuContainer{
+    position: absolute;
+    display: flex;
+    gap: 25px;
+    max-width: 300px;
+    border: 1px solid;
+    padding: 5px 20px;
+    top: 10px;
+    background-color: rgba(255, 255, 255, .8);
+    border-radius: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 0px 10px #6c757d;
+}
+
+.menuOption{
+    cursor: pointer;
+    padding: 5px;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.menuOption:hover,.menuOption:active{
+    background-color: #e7c6ff;
+}

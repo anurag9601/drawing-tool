@@ -1,0 +1,37 @@
+.toolBoxContainer{
+    position: absolute;
+    top: 20vh;
+    font-size: 13px;
+    left: 10px;
+    border: 1px solid;
+    border-radius: 5px;
+    max-width: 200px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px #6c757d;
+    background-color: rgba(255, 255, 255, .9);
+}
+
+.progressBar input{
+    height: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.colours{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 7px 0;
+}
+
+.colour{
+    height: 15px;
+    width: 15px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.colour:hover{
+    border: 1px solid;
+}
