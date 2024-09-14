@@ -15,7 +15,15 @@ const io = new socket_io_1.Server(server, {
     }
 });
 io.on("connection", (socket) => {
-    console.log(`User connected with id ${socket.id}`);
+    socket.on("beginPath", (arg) => {
+        socket.broadcast.emit("beginPath", arg);
+    });
+    socket.on("drawLine", (arg) => {
+        socket.broadcast.emit("drawLine", arg);
+    });
+    socket.on("changeConfig", (arg) => {
+        socket.broadcast.emit("changeConfig", arg);
+    });
 });
 const port = process.env.PORT || 8000;
 server.listen(port, () => {

@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TOOL } from "@/pages/constant";
 import { actionItemClick } from "@/pages/slice/menuSlice";
+import { socket } from "@/pages/socket";
 
 export default function Board() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,7 +44,6 @@ export default function Board() {
     }
 
     dispatch(actionItemClick(null));
-
   }, [actionMenuItem, dispatch]);
 
   useEffect(() => {
@@ -52,12 +52,19 @@ export default function Board() {
     const context =
       (canvas.getContext("2d") as CanvasRenderingContext2D) || null;
 
-    const changeConfig = () => {
+    const changeConfig = (color: string, size: number) => {
       context.strokeStyle = color;
       context.lineWidth = size;
     };
 
-    changeConfig();
+    const handleSocketChangeConfig = (arg: any) => {
+      changeConfig(arg.color, arg.size);
+      console.log(arg.color, arg.size);
+    };
+
+    socket.on("changeConfig", handleSocketChangeConfig);
+
+    changeConfig(color, size);
   }, [color, size]);
 
   useLayoutEffect(() => {
@@ -88,11 +95,13 @@ export default function Board() {
     const handleMouseDown = (e: MouseEvent) => {
       shouldDraw.current = true;
       beginPath(e.clientX, e.clientY);
+      socket.emit("beginPath", { x: e.clientX, y: e.clientY });
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (!shouldDraw.current) return;
       drawLine(e.clientX, e.clientY);
+      socket.emit("drawLine", { x: e.clientX, y: e.clientY });
     };
 
     const handleMouseUp = (e: MouseEvent) => {
@@ -102,6 +111,17 @@ export default function Board() {
       historyPointer.current = drawHistory.current.length - 1;
     };
 
+    const handleSocketBeginPath = (arg: any) => {
+      beginPath(arg.x, arg.y);
+    };
+
+    const handleSocketDrawLine = (arg: any) => {
+      drawLine(arg.x, arg.y);
+    };
+
+    socket.on("beginPath", handleSocketBeginPath);
+    socket.on("drawLine", handleSocketDrawLine);
+
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseup", handleMouseUp);
@@ -110,6 +130,9 @@ export default function Board() {
       canvas.removeEventListener("mousedown", handleMouseDown);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseup", handleMouseUp);
+
+      socket.off("beginPath", handleSocketBeginPath);
+      socket.off("drawLine", handleSocketDrawLine);
     };
   }, []);
   return <canvas ref={canvasRef}></canvas>;

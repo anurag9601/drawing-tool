@@ -4,11 +4,11 @@ import { COLOURS } from "@/pages/constant";
 import { TOOL } from "@/pages/constant";
 import { changeColor, changeBrushSize } from "@/pages/slice/toolboxSlice";
 import cx from "classnames";
+import { socket } from "@/pages/socket";
+import { useEffect } from "react";
 
 export default function ToolBox() {
-  const activeMenuItem = useSelector(
-    (state: any) => state.menu.activeMenuItem
-  );
+  const activeMenuItem = useSelector((state: any) => state.menu.activeMenuItem);
 
   const showStrokeToolOption = activeMenuItem === TOOL.PENCILE;
   const showBrushToolOption =
@@ -16,17 +16,22 @@ export default function ToolBox() {
 
   const dispatch = useDispatch();
 
+  const { color, size } = useSelector(
+    (state: any) => state.toolkit[activeMenuItem]
+  );
   const handleChangeBrushSize = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeBrushSize({ item: activeMenuItem, size: e.target.value }));
+    socket.emit("changeConfig", { color, size: e.target.value });
   };
 
   const handleChangeColor = (newColor: string) => {
     dispatch(changeColor({ item: activeMenuItem, color: newColor }));
+    socket.emit("changeConfig", { color: newColor, size });
   };
 
-  const { color, size } = useSelector(
-    (state: any) => state.toolkit[activeMenuItem]
-  );
+  useEffect(() => {
+    socket.emit("changeConfig", { color, size });
+  }, [activeMenuItem]);
 
   return (
     <div className={style.toolBoxContainer}>

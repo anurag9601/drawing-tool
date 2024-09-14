@@ -14,7 +14,17 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log(`User connected with id ${socket.id}`);
+    socket.on("beginPath", (arg) => {
+        socket.broadcast.emit("beginPath", arg);
+    });
+
+    socket.on("drawLine", (arg) => {
+        socket.broadcast.emit("drawLine", arg);
+    });
+
+    socket.on("changeConfig", (arg)=>{
+        socket.broadcast.emit("changeConfig", arg);
+    })
 })
 
 const port = process.env.PORT || 8000;
