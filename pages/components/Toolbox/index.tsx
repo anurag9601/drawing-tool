@@ -26,8 +26,6 @@ export default function ToolBox() {
     (state: any) => state.toolkit[activeMenuItem]
   );
 
-  console.log(color, size);
-
   return (
     <div className={style.toolBoxContainer}>
       {showStrokeToolOption && (

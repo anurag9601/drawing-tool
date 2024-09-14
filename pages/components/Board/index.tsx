@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import style from "./index.module.css";
 import { useSelector } from "react-redux";
 
 export default function Board() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const shouldDraw = useRef<boolean>(false);
 
   const activeMenuItem = useSelector((state: any) => state.menu.activeMenuItem);
 
@@ -16,8 +17,56 @@ export default function Board() {
     const canvas = canvasRef.current;
     const context =
       (canvas.getContext("2d") as CanvasRenderingContext2D) || null;
+
+    const changeConfig = () => {
+      context.strokeStyle = color;
+      context.lineWidth = size;
+    };
+
+    changeConfig();
+  }, [color, size]);
+
+  useLayoutEffect(() => {
+    if (!canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const context =
+      (canvas.getContext("2d") as CanvasRenderingContext2D) || null;
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
+
+    const beginPath = (x: number, y: number) => {
+      context.beginPath();
+      context.moveTo(x, y);
+    };
+
+    const drawLine = (x: number, y: number) => {
+      context.lineTo(x, y);
+      context.stroke();
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+      shouldDraw.current = true;
+      beginPath(e.clientX, e.clientY);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!shouldDraw.current) return;
+      drawLine(e.clientX, e.clientY);
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      shouldDraw.current = false;
+    };
+
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+    };
   }, []);
   return <canvas ref={canvasRef}></canvas>;
 }
