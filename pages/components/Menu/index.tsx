@@ -18,6 +18,10 @@ export default function Menu() {
     dispatch(menuItemClick(itemName));
   };
 
+  const handleActionBtn = (actionName: string) => {
+    dispatch(actionItemClick(actionName));
+  };
+
   return (
     <div className={style.menuContainer}>
       <div
@@ -38,13 +42,25 @@ export default function Menu() {
       >
         <SiEraser />
       </div>
-      <div className={style.menuOption} title="Undo">
+      <div
+        className={style.menuOption}
+        title="Undo"
+        onClick={() => handleActionBtn(TOOL.UNDO)}
+      >
         <CiUndo />
       </div>
-      <div className={style.menuOption} title="Redo">
+      <div
+        className={style.menuOption}
+        title="Redo"
+        onClick={() => handleActionBtn(TOOL.REDO)}
+      >
         <CiRedo />
       </div>
-      <div className={style.menuOption} title="Download">
+      <div
+        className={style.menuOption}
+        title="Download"
+        onClick={() => handleActionBtn(TOOL.DOWNLOAD)}
+      >
         <IoDownloadOutline />
       </div>
     </div>

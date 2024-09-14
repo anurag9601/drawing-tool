@@ -6,7 +6,9 @@ import { changeColor, changeBrushSize } from "@/pages/slice/toolboxSlice";
 import cx from "classnames";
 
 export default function ToolBox() {
-  const activeMenuItem = useSelector((state: any) => state.menu.activeMenuItem);
+  const activeMenuItem = useSelector(
+    (state: any) => state.menu.activeMenuItem
+  );
 
   const showStrokeToolOption = activeMenuItem === TOOL.PENCILE;
   const showBrushToolOption =
